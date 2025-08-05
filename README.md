@@ -32,6 +32,15 @@ This GUI supports all sites that yt-dlp supports, including but not limited to:
 - TikTok
 - And more!
 
+## MP3 Installation (FFMpeg)
+
+1. Open command prompt.
+2. winget install FFmpeg
+3. Done, you should now be allowed to download as MP3.
+
+Known bugs:
+- Creates duplicate formats, so delete the non mp3 manually for now.
+
 ## 📦 Building Your Own Executable
 
 To create a standalone executable:
