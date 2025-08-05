@@ -29,7 +29,7 @@ class Config:
             if self.config_file.exists():
                 with open(self.config_file, 'r') as f:
                     loaded_config = json.load(f)
-                # Merge with defaults to handle new config options
+                #Merge with defaults to handle new config options
                 config = self.default_config.copy()
                 config.update(loaded_config)
                 return config
@@ -45,7 +45,7 @@ class Config:
             with open(self.config_file, 'w') as f:
                 json.dump(self.config, f, indent=2)
         except Exception:
-            pass  # Fail silently if we can't save config
+            pass  #Fail silently if we can't save config
     
     def get(self, key, default=None):
         """Get configuration value"""

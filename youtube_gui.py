@@ -238,7 +238,7 @@ class YouTubeDownloaderGUI:
         self.audio_format_var = tk.StringVar(value=self.config.get("audio_format", "best"))
         self.audio_format_combo = ttk.Combobox(options_frame, textvariable=self.audio_format_var, 
                                              style='Custom.TCombobox', state='readonly', values=[
-            "best", "m4a", "webm", "mp3 (requires FFmpeg)"
+            "best", "m4a", "webm", "mp3"
         ])
         
         #Store reference to audio format combo for dropdown management
@@ -260,7 +260,11 @@ class YouTubeDownloaderGUI:
         self.info_btn.grid(row=0, column=1, padx=(0, 10))
         
         ttk.Button(button_frame, text="Clear Log", command=self.clear_log, 
-                  style='Custom.TButton').grid(row=0, column=2)
+                  style='Custom.TButton').grid(row=0, column=2, padx=(0, 10))
+        
+        #FFmpeg install button
+        ttk.Button(button_frame, text="Install FFmpeg", command=self.install_ffmpeg, 
+                  style='Custom.TButton').grid(row=0, column=3)
         
         #Progress section with custom styling
         self.progress_var = tk.StringVar(value="Ready ✅")
@@ -465,18 +469,18 @@ class YouTubeDownloaderGUI:
                 if self.audio_only_var.get():
                     audio_format = self.audio_format_var.get()
                     
-                    if audio_format == "mp3 (requires FFmpeg)":
-                        #Check if FFmpeg is available for MP3 conversion
-                        if not self.check_ffmpeg():
-                            self.log_message("Warning: FFmpeg not found. Cannot convert to MP3.")
-                            self.log_message("To install FFmpeg:")
-                            self.log_message("1. Download from: https://ffmpeg.org/download.html")
-                            self.log_message("2. Or install via chocolatey: choco install ffmpeg")
-                            self.log_message("3. Or install via winget: winget install FFmpeg")
-                            self.log_message("Falling back to best available audio format...")
-                            cmd.extend(['--format', 'bestaudio'])
-                        else:
+                    if audio_format == "mp3":
+                        if self.check_ffmpeg():
+                            #FFmpeg available, force MP3 conversion
+                            #Use a format that guarantees conversion will happen
+                            cmd.extend(['--format', 'best[acodec!=mp3]/bestaudio'])
                             cmd.extend(['-x', '--audio-format', 'mp3', '--audio-quality', '0'])
+                            self.log_message("FFmpeg detected. Will force conversion to MP3.")
+                        else:
+                            #No FFmpeg, try to get MP3 directly or fallback to M4A
+                            self.log_message("FFmpeg not found. Trying to download MP3 directly or will fallback to M4A...")
+                            cmd.extend(['--format', 'bestaudio[ext=mp3]/bestaudio[ext=m4a]/bestaudio'])
+                            cmd.extend(['--extract-audio'])
                     elif audio_format == "best":
                         cmd.extend(['--format', 'bestaudio'])
                     elif audio_format in ["m4a", "webm"]:
@@ -529,6 +533,60 @@ class YouTubeDownloaderGUI:
                 self.progress_var.set("Ready ✅")
         
         threading.Thread(target=download_thread, daemon=True).start()
+    
+    def install_ffmpeg(self):
+        """Install FFmpeg using winget (Windows Package Manager)"""
+        def install_thread():
+            try:
+                self.progress_var.set("Installing FFmpeg... 🔧")
+                self.progress_bar.start()
+                self.log_message("🔧 Installing FFmpeg via winget...")
+                
+                #Try to install FFmpeg using winget
+                result = subprocess.run(['winget', 'install', 'FFmpeg'], 
+                                      capture_output=True, text=True, check=True)
+                
+                self.log_message("✅ FFmpeg installed successfully!")
+                self.log_message("Note: You may need to restart the application for FFmpeg to be detected.")
+                messagebox.showinfo("Success", "✅ FFmpeg installed successfully!\n\nYou may need to restart the application for FFmpeg to be detected.")
+                
+            except subprocess.CalledProcessError as e:
+                error_msg = f"Installation failed. You may need to install FFmpeg manually.\n\nError: {e.stderr if e.stderr else 'Unknown error'}"
+                self.log_message(f"FFmpeg installation failed: {error_msg}")
+                
+                #Provide manual installation instructions
+                manual_msg = """FFmpeg installation failed. Please install manually:
+
+1. Visit https://ffmpeg.org/download.html
+2. Download FFmpeg for Windows
+3. Extract and add to your system PATH
+
+Or try installing winget first:
+- Go to Microsoft Store and install "App Installer"
+- Then try the FFmpeg install button again"""
+                
+                messagebox.showinfo("Manual Installation Required", manual_msg)
+                
+            except FileNotFoundError:
+                #winget not found
+                manual_msg = """Windows Package Manager (winget) not found.
+
+To install FFmpeg manually:
+1. Visit https://ffmpeg.org/download.html
+2. Download FFmpeg for Windows
+3. Extract and add to your system PATH
+
+Or install winget first:
+- Go to Microsoft Store and install "App Installer" """
+                
+                self.log_message("winget not found. Manual FFmpeg installation required.")
+                messagebox.showinfo("Manual Installation Required", manual_msg)
+                
+            finally:
+                self.progress_bar.stop()
+                self.progress_var.set("Ready ✅")
+        
+        threading.Thread(target=install_thread, daemon=True).start()
     
     def install_dependencies(self):
         """Install yt-dlp using pip"""

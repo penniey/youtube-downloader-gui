@@ -1,0 +1,21 @@
+YouTube Downloader GUI - v1.0.0 
+ 
+## What's New 
+- Beautiful dark theme with purple accents 
+- Easy-to-use GUI for yt-dlp 
+- Support for multiple video qualities 
+- Audio-only downloads in multiple formats 
+- Real-time download progress 
+- Video information preview 
+- Automatic dependency management 
+ 
+## Installation 
+1. Download YouTube-Downloader-GUI.exe 
+2. Run the executable - no installation required! 
+ 
+## System Requirements 
+- Windows 10/11 
+- Internet connection for downloading videos 
+ 
+## Note 
+This is a portable executable - no installation required! 
