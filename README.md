@@ -2,8 +2,6 @@
 
 A simple, user-friendly GUI wrapper for yt-dlp (youtube-dl) built with Python's tkinter.
 
-![YouTube Downloader GUI](https://via.placeholder.com/800x600/1e1e1e/ffffff?text=YouTube+Downloader+GUI)
-
 ## 🚀 Quick Start (No Installation Required)
 
 **Download the ready-to-use executable:**
@@ -23,60 +21,6 @@ Simply download and run - no Python installation required!
 - **🔧 Automatic dependency installation**: The app can install yt-dlp if missing
 - **🎵 Audio formats**: MP3, M4A, WebM support
 
-## 💻 For Developers
-
-### Requirements
-
-- Python 3.6 or higher
-- tkinter (usually included with Python)
-- yt-dlp (will be installed automatically if missing)
-
-### Installation
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/youtube-downloader-gui.git
-   cd youtube-downloader-gui
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### Usage
-
-1. Run the application:
-   ```bash
-   python youtube_gui.py
-   ```
-
-2. Enter a YouTube URL in the URL field
-3. Choose your download options:
-   - **Quality**: Select video quality (best, 720p, 480p, etc.)
-   - **Audio only**: Check this to download audio in various formats
-4. Select download location (defaults to Downloads folder)
-5. Click "Download" to start downloading
-
-## 🔧 Features Explained
-
-### URL Input
-- Paste YouTube URLs directly or use the "Paste" button to get URL from clipboard
-- Supports individual videos
-
-### Download Options
-- **Quality Selection**: Choose from various video qualities or "best" for highest available
-- **Audio Only**: Downloads audio in multiple formats (MP3, M4A, WebM)
-
-### Video Information
-- Click "Get Info" to see video details before downloading:
-  - Title, uploader, duration, view count, upload date
-
-### Progress Tracking
-- Real-time output log shows download progress
-- Progress bar indicates when operations are running
-- Status messages keep you informed
-
 ## 🌐 Supported Sites
 
 This GUI supports all sites that yt-dlp supports, including but not limited to:
@@ -86,7 +30,7 @@ This GUI supports all sites that yt-dlp supports, including but not limited to:
 - Twitter
 - Instagram
 - TikTok
-- And many more!
+- And more!
 
 ## 📦 Building Your Own Executable
 
@@ -108,24 +52,6 @@ To create a standalone executable:
 
 The executable will be created in the `dist` folder.
 
-## 🤝 Contributing
-
-Feel free to submit issues, feature requests, or pull requests to improve this application.
-
 ## 📄 License
 
 This project is open source. Please respect YouTube's terms of service and only download content you have permission to download.
-
-## ⭐ Screenshots
-
-### Main Interface
-![Main Interface](https://via.placeholder.com/800x600/1e1e1e/ffffff?text=Dark+Theme+Interface)
-
-### Download in Progress
-![Download Progress](https://via.placeholder.com/800x600/1e1e1e/ffffff?text=Download+Progress)
-
-## 🔗 Links
-
-- [Download Latest Release](../../releases/latest)
-- [Report Issues](../../issues)
-- [View Source Code](../../)
